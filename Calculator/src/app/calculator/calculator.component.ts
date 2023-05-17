@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalculatorComponent implements OnInit {
 
+  input:string='';
+  result:string='';
+
   constructor() { }
 
   ngOnInit(): void {

@@ -10,7 +10,7 @@ export class CalculatorComponent implements OnInit {
   input: string = '';
   total: string = '';
 
-  totalNum(num: string) {
+  pressNum(num: string) {
     //  not allow more than once
     if (num == ".") {
       if (this.input != "") {
@@ -20,7 +20,20 @@ export class CalculatorComponent implements OnInit {
           return;
       }
     }
+    // Not Allow 0 at beginning. 
 
+    if (num == "0") {
+      if (this.input == "") {
+        return;
+      }
+      const PrevKey = this.input[this.input.length - 1];
+      if (PrevKey === '/' || PrevKey === '*' || PrevKey === '-' || PrevKey === '+') {
+        return;
+      }
+    }
+
+    this.input = this.input + num
+    this.calcAnswer();
 
 
   }
@@ -34,6 +47,57 @@ export class CalculatorComponent implements OnInit {
     if (this.input.toString().lastIndexOf("/") > pos) pos = this.input.lastIndexOf("/")
     console.log('Last ' + this.input.substr(pos + 1))
     return this.input.substr(pos + 1)
+  }
+
+  pressOperator(op: string) {
+ 
+    //Do not allow operators more than once
+    const lastKey = this.input[this.input.length - 1];
+    if (lastKey === '/' || lastKey === '*' || lastKey === '-' || lastKey === '+')  {
+      return;
+    }
+   
+    this.input = this.input + op
+    this.calcAnswer();
+  }
+
+  clear(){
+    if(this.input !=""){
+      this.input=this.substr(0,this.input.length-1)
+    }
+  }
+  substr(arg0: number, arg1: number): string {
+    throw new Error('Method not implemented.');
+  }
+  allClear(){
+    this.total = '';
+    this.input = '';
+  }
+
+  calcAnswer() {
+    let formula = this.input;
+ 
+    let lastKey = formula[formula.length - 1];
+ 
+    if (lastKey === '.')  {
+      formula=formula.substr(0,formula.length - 1);
+    }
+ 
+    lastKey = formula[formula.length - 1];
+ 
+    if (lastKey === '/' || lastKey === '*' || lastKey === '-' || lastKey === '+' || lastKey === '.')  {
+      formula=formula.substr(0,formula.length - 1);
+    }
+ 
+    console.log("Formula " +formula);
+    this.total = eval(formula);
+  }
+
+  getAnswer(){
+    this.calcAnswer();
+    this.input = this.total;
+    if(this.input=="0")
+    this.input ="";
   }
 
 
